@@ -1,4 +1,4 @@
-/ COMSC-210 | Lab 27 | Diksha Tara Natesan
+// COMSC-210 | Lab 27 | Diksha Tara Natesan
 // IDE used: Vim/Terminal
 
 #include <iostream>
@@ -8,54 +8,44 @@
 using namespace std;
 
 int main() {
-    // declarations
-    map<int, string, string> villagerColors;
+    map<string, tuple<int, string, string>> villagerInfo;
 
-    // insert elements into the map
-    // note how the right-hand side of the assignment are the vector elements
-    villagerColors["Audie"] = {"Orange", "Yellow", "Red"};
-    villagerColors["Raymond"] = {"Black", "Gray", "White"};
-    villagerColors.insert({"Marshal", {"Blue", "White", "Black"}});
+    villagerInfo["Audie"] = make_tuple(9, "Cow", "Legendary");
+    villagerInfo["Raymond"] = make_tuple(7, "Elephant", "I only have one rule");
+    villagerInfo.insert({"Marshal", make_tuple(8, "Dog", "True story")});
 
-    // access the map using a range-based for loop
-    cout << "Villagers and their favorite colors (range-based for loop):" << endl;
-    for (auto pair : villagerColors) {
-        cout << pair.first << ": ";
-        for (auto color : pair.second)
-            cout << color << " ";
-        cout << endl;
+    cout << "Villagers and their info (range-based for loop):" << endl;
+    for (auto pair : villagerInfo) {
+        cout << pair.first << ": "
+             << "Friendship Level=" << get<0>(pair.second) << ", "
+             << "Species=" << get<1>(pair.second) << ", "
+             << "Catchphrase=" << get<2>(pair.second) << endl;
     }
 
-    // access the map using iterators
-    cout << "\nVillagers and their favorite colors (iterators):" << endl;
-    for (map<string, vector<string>>::iterator it = villagerColors.begin(); 
-                                               it != villagerColors.end(); ++it) {
-        cout << it->first << ": ";
-        for (auto color : it->second) {
-            cout << color << " ";
-        }
-        cout << endl;
+    cout << "\nVillagers and their info (iterators):" << endl;
+    for (map<string, tuple<int, string, string>>::iterator it = villagerInfo.begin(); 
+                                                         it != villagerInfo.end(); ++it) {
+        cout << it->first << ": "
+             << "Friendship Level=" << get<0>(it->second) << ", "
+             << "Species=" << get<1>(it->second) << ", "
+             << "Catchphrase=" << get<2>(it->second) << endl;
     }
 
-    // delete an element
-    villagerColors.erase("Raymond");
+    villagerInfo.erase("Raymond");
 
-    // search for an element using .find() to avoid errors
     string searchKey = "Audie";
-    auto it = villagerColors.find(searchKey);
-    if (it != villagerColors.end()) {  // the iterator points to beyond the end of the map
-                                       // if searchKey is not found
-        cout << "\nFound " << searchKey << "'s favorite colors: ";
-        for (auto color : it->second)  // range loop to traverse the value/vector
-            cout << color << " ";
-        cout << endl;
+    auto it = villagerInfo.find(searchKey);
+    if (it != villagerInfo.end()) {
+        cout << "\nFound " << searchKey << "'s info: "
+             << "Friendship Level=" << get<0>(it->second) << ", "
+             << "Species=" << get<1>(it->second) << ", "
+             << "Catchphrase=" << get<2>(it->second) << endl;
     } else
         cout << endl << searchKey << " not found." << endl;
 
-    // report size, clear, report size again to confirm map operations
-    cout << "\nSize before clear: " << villagerColors.size() << endl;
-    villagerColors.clear();
-    cout << "Size after clear: " << villagerColors.size() << endl;
+    cout << "\nSize before clear: " << villagerInfo.size() << endl;
+    villagerInfo.clear();
+    cout << "Size after clear: " << villagerInfo.size() << endl;
 
     return 0;
 }
